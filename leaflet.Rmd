@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Using Leaflet
 
-This is a short implementation of leaflet. It shows lat/lon of points consisting a short bicycle trail near where i live. The source of the data is https://www.trailforks.com/trails/prava-hrana/. This page will render the trail (via the lat/long of its vertices) on a map using leaflet. Enjoy!
+This is a short implementation of leaflet. It shows lat/lon of points consisting a short bicycle trail in my area. The source of the data is https://www.trailforks.com/trails/prava-hrana/. This page will render the trail (via the lat/long of its vertices) on a map using leaflet. Enjoy!
 
 ```{r}
 #Read file of lat,lon and add to dataframe
@@ -19,7 +19,8 @@ phrana <- "D:/Github/np_leaflet/prava-hrana.csv"
 ph_trail <- read.csv(phrana,header=FALSE,sep=",",col.names=c("lat","lng"))
 ```
 
-In order to create the map, will use the data frame as the source for the lat/lon of the markers. The icon for each marker is a png from Wikipedia (that denotes the type of the trail) and also each marker is clickable to the website that contains the trail (Trailforks)
+In order to create the map, we will use the data frame as the source for the lat/lon of the markers. The icon for each marker is a png from Wikipedia (that denotes the type of the trail) and also each marker is clickable to the website that contains the trail (Trailforks).  
+A note on the legend of the map, is that there is no off-the-shelf implementation of icons in legends, and while solutions exist, they were considered as out-of-scope for this short demonstration. I hope you like the map and will be inspired to visit this area!
 
 ```{r}
 library(leaflet)
@@ -31,10 +32,8 @@ bd_icon <- makeIcon(
 
 bd_site <- "<a href='https://www.trailforks.com/trails/prava-hrana/'>Prava Hrana Trail</a>"
 
-
 ph_trail %>% 
     leaflet() %>%
     addTiles() %>%
     addMarkers(icon = bd_icon,popup=bd_site) %>%
     addLegend(labels = "Black Diamond", colors = c("black"))
-
