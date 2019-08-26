@@ -1,0 +1,40 @@
+---
+title: "np_leaflet"
+author: "Nikolaos Perdikis"
+date: "26 8 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Using Leaflet
+
+This is a short implementation of leaflet. It shows lat/lon of points consisting a short bicycle trail near where i live. The source of the data is https://www.trailforks.com/trails/prava-hrana/. This page will render the trail (via the lat/long of its vertices) on a map using leaflet. Enjoy!
+
+```{r}
+#Read file of lat,lon and add to dataframe
+phrana <- "D:/Github/np_leaflet/prava-hrana.csv"
+ph_trail <- read.csv(phrana,header=FALSE,sep=",",col.names=c("lat","lng"))
+```
+
+In order to create the map, will use the data frame as the source for the lat/lon of the markers. The icon for each marker is a png from Wikipedia (that denotes the type of the trail) and also each marker is clickable to the website that contains the trail (Trailforks)
+
+```{r}
+library(leaflet)
+
+bd_icon <- makeIcon(
+    iconUrl = "https://upload.wikimedia.org/wikipedia/commons/0/0c/Ski_trail_rating_symbol-black_diamond.svg",
+    iconWidth = 31*215/230, iconHeight = 31,
+    iconAnchorX = 31*215/230/2, iconAnchorY = 16)
+
+bd_site <- "<a href='https://www.trailforks.com/trails/prava-hrana/'>Prava Hrana Trail</a>"
+
+
+ph_trail %>% 
+    leaflet() %>%
+    addTiles() %>%
+    addMarkers(icon = bd_icon,popup=bd_site) %>%
+    addLegend(labels = "Black Diamond", colors = c("black"))
+
